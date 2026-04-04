@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Organizational Rewiring — Plumb Construction Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;
+  --off-black:#111111;
+  --dark:#1a1a1a;
+  --mid:#2d2d2d;
+  --steel:#4a5568;
+  --border:#d4d4d4;
+  --light:#f5f5f3;
+  --white:#ffffff;
+  --yellow:#f5b800;
+  --yellow2:#ffc91a;
+  --text:#1a1a1a;
+  --muted:#666666;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;font-size:16px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,10,10,0.92);backdrop-filter:blur(10px);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.3s}
+.nav-logo{display:flex;flex-direction:column;gap:1px}
+.nav-logo-top{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--white);letter-spacing:2px;text-transform:uppercase;line-height:1}
+.nav-logo-sub{font-size:9px;font-weight:500;color:var(--yellow);letter-spacing:3px;text-transform:uppercase}
+.nav-right{display:flex;align-items:center}
+.nav-links{display:flex}
+.nav-links a{font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;padding:0 20px;height:64px;display:flex;align-items:center;border-right:1px solid rgba(255,255,255,0.08);transition:color 0.2s,background 0.2s}
+.nav-links a:first-child{border-left:1px solid rgba(255,255,255,0.08)}
+.nav-links a:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+.nav-cta{font-size:11px;font-weight:700;color:var(--black);background:var(--yellow);letter-spacing:1.5px;text-transform:uppercase;padding:0 24px;height:64px;display:flex;align-items:center;text-decoration:none;transition:background 0.2s}
+.nav-cta:hover{background:var(--yellow2)}
+
+/* HERO SLIDESHOW */
+.hero{height:100vh;min-height:640px;position:relative;display:flex;align-items:flex-end;overflow:hidden;background:var(--black)}
+.slides{position:absolute;inset:0;z-index:0}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;transform:scale(1.04);transition:opacity 1.2s ease,transform 7s ease}
+.slide.active{opacity:1;transform:scale(1)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.45) 45%,rgba(0,0,0,0.2) 100%);z-index:1}
+.hero-overlay-l{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 55%);z-index:2}
+.hero-content{position:relative;z-index:3;padding:0 48px 88px;max-width:860px}
+.hero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--yellow);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:2px;background:var(--yellow)}
+h1{font-family:'Libre Baskerville',serif;font-size:clamp(40px,5.8vw,74px);font-weight:700;line-height:1.06;color:var(--white);letter-spacing:-0.5px;margin-bottom:26px}
+h1 span{color:var(--yellow);font-style:italic}
+.hero-sub{font-size:17px;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.72);max-width:520px;margin-bottom:40px}
+.hero-btns{display:flex;gap:2px;flex-wrap:wrap}
+.btn-yellow{background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;text-decoration:none;transition:background 0.2s;display:inline-flex;align-items:center;gap:10px}
+.btn-yellow:hover{background:var(--yellow2)}
+.btn-yellow::after{content:'→';font-size:16px}
+.btn-outline{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.35);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:10px}
+.btn-outline:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.6)}
+
+/* Slide dots */
+.slide-dots{position:absolute;bottom:36px;right:48px;z-index:4;display:flex;gap:8px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;border:none;padding:0}
+.dot.active{background:var(--yellow);width:24px;border-radius:3px}
+
+/* Slide counter */
+.slide-counter{position:absolute;top:80px;right:48px;z-index:4;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;color:rgba(255,255,255,0.4)}
+.slide-counter span{color:var(--white)}
+
+/* Stats bottom right */
+.hero-stats{position:absolute;bottom:0;right:0;z-index:3;display:flex;border-top:1px solid rgba(255,255,255,0.1);border-left:1px solid rgba(255,255,255,0.1)}
+.hero-stat{padding:18px 32px;border-right:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.55);backdrop-filter:blur(8px)}
+.hero-stat-num{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;color:var(--white);line-height:1}
+.hero-stat-num span{color:var(--yellow)}
+.hero-stat-label{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:3px}
+
+/* TICKER */
+.ticker{background:var(--yellow);padding:10px 0;overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-flex;animation:ticker 32s linear infinite}
+.ticker-item{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);padding:0 40px;display:flex;align-items:center;gap:16px}
+.ticker-item::after{content:'◆';font-size:7px;opacity:0.4}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:88px 48px}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.section-label::before{content:'';width:24px;height:2px;background:var(--yellow);flex-shrink:0}
+h2{font-family:'Libre Baskerville',serif;font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1.1;letter-spacing:-0.3px;margin-bottom:16px;color:var(--black)}
+h2 em{color:var(--steel);font-style:italic}
+.lead{font-size:17px;font-weight:300;line-height:1.75;color:var(--muted);max-width:580px}
+
+/* SERVICES - dark */
+.what{background:var(--off-black);padding:0}
+.what-inner{display:grid;grid-template-columns:1fr 1fr 1fr}
+.what-card{padding:56px 44px;border-right:1px solid rgba(255,255,255,0.07);position:relative;overflow:hidden;transition:background 0.3s;cursor:default}
+.what-card:last-child{border-right:none}
+.what-card:hover{background:rgba(255,255,255,0.03)}
+.what-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--yellow);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.what-card:hover::after{transform:scaleX(1)}
+.what-num{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;margin-bottom:20px}
+.what-title{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:14px;line-height:1.2}
+.what-desc{font-size:14px;font-weight:300;line-height:1.75;color:rgba(255,255,255,0.5)}
+.what-link{display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);text-decoration:none;opacity:0;transition:opacity 0.2s}
+.what-card:hover .what-link{opacity:1}
+
+/* APPROACH */
+.approach{background:var(--white)}
+.approach-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:380px 1fr;gap:88px;align-items:start}
+.approach-right{display:flex;flex-direction:column;border-top:1px solid var(--border)}
+.approach-item{padding:28px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:40px 1fr;gap:20px;align-items:start}
+.approach-item-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--yellow);letter-spacing:1px;margin-top:3px}
+.approach-item-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--black);margin-bottom:6px}
+.approach-item-text{font-size:14px;font-weight:300;line-height:1.7;color:var(--muted)}
+
+/* PROOF */
+.proof{background:var(--dark);padding:0;overflow:hidden}
+.proof-inner{display:grid;grid-template-columns:1fr 1fr}
+.proof-left{padding:72px 48px;border-right:1px solid rgba(255,255,255,0.07)}
+.proof-right{padding:72px 48px}
+.project-list{display:flex;flex-direction:column;margin-top:36px;border-top:1px solid rgba(255,255,255,0.1)}
+.proj{padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.07);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;transition:padding 0.2s;cursor:default}
+.proj:hover{padding-left:8px}
+.proj-name{font-size:14px;font-weight:500;color:var(--white);margin-bottom:3px;transition:color 0.2s}
+.proj:hover .proj-name{color:var(--yellow)}
+.proj-detail{font-size:12px;font-weight:300;color:rgba(255,255,255,0.38)}
+.proj-arrow{font-size:16px;color:rgba(255,255,255,0.18);transition:color 0.2s,transform 0.2s}
+.proj:hover .proj-arrow{color:var(--yellow);transform:translateX(4px)}
+.cred-grid{display:flex;flex-direction:column;gap:12px;margin-top:36px}
+.cred{display:flex;gap:16px;align-items:flex-start;padding:16px;background:rgba(255,255,255,0.03);border-left:3px solid var(--yellow)}
+.cred-icon{width:6px;height:6px;background:var(--yellow);margin-top:5px;flex-shrink:0;transform:rotate(45deg)}
+.cred-text{font-size:13px;font-weight:300;line-height:1.6;color:rgba(255,255,255,0.55)}
+.cred-text strong{color:var(--white);font-weight:600}
+
+/* PRODUCT */
+.product{background:var(--light)}
+.product-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.product-card{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--yellow);padding:44px}
+.product-card-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:16px}
+.product-card-title{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--black);margin-bottom:12px}
+.product-card-desc{font-size:14px;font-weight:300;line-height:1.75;color:var(--muted);margin-bottom:24px}
+.price-row{display:flex;align-items:baseline;gap:6px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:6px}
+.price-big{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:700;color:var(--black);line-height:1}
+.price-mo{font-size:14px;font-weight:300;color:var(--muted)}
+.price-note{font-size:12px;color:var(--muted);font-weight:300;margin-bottom:24px;margin-top:6px}
+.feats{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.pf{display:flex;gap:12px;align-items:flex-start;font-size:13px;font-weight:400;line-height:1.6;color:var(--text)}
+.pf::before{content:'';width:5px;height:5px;background:var(--yellow);flex-shrink:0;margin-top:6px;transform:rotate(45deg)}
+.product-cta{display:block;background:var(--yellow);color:var(--black);text-align:center;padding:15px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:background 0.2s}
+.product-cta:hover{background:var(--yellow2)}
+
+/* CTA BAND */
+.cta-band{background:var(--black);padding:80px 48px}
+.cta-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center}
+.cta-copy h2{color:var(--white);margin-bottom:10px}
+.cta-copy p{color:rgba(255,255,255,0.5);font-size:16px;font-weight:300;line-height:1.7;max-width:520px}
+.cta-form-wrap{display:flex;flex-direction:column;gap:10px;min-width:300px}
+.cta-input{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:var(--white);padding:14px 18px;font-size:14px;font-family:'Barlow',sans-serif;outline:none;transition:border-color 0.2s;width:100%}
+.cta-input::placeholder{color:rgba(255,255,255,0.3)}
+.cta-input:focus{border-color:var(--yellow)}
+.cta-submit{background:var(--yellow);color:var(--black);border:none;padding:15px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;width:100%}
+.cta-submit:hover{background:var(--yellow2)}
+.cta-fine{font-size:11px;color:rgba(255,255,255,0.25);font-weight:300;text-align:center}
+
+/* FOOTER */
+footer{background:var(--off-black);border-top:1px solid rgba(255,255,255,0.08);padding:0 48px}
+.footer-top{display:grid;grid-template-columns:260px 1fr 1fr 1fr;gap:48px;padding:56px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.footer-brand-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--white);letter-spacing:2px;text-transform:uppercase}
+.footer-brand-sub{font-size:9px;font-weight:500;color:var(--yellow);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.footer-tagline{font-size:13px;font-weight:300;color:rgba(255,255,255,0.38);line-height:1.65}
+.footer-col-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--yellow);margin-bottom:16px}
+.footer-col a{display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,0.45);text-decoration:none;margin-bottom:8px;transition:color 0.2s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:20px 0;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.22);font-weight:300}
+.footer-loc{font-size:11px;color:rgba(255,255,255,0.22);font-weight:300;display:flex;align-items:center;gap:6px}
+.footer-loc::before{content:'◆';font-size:7px;color:var(--yellow)}
+
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity 0.55s ease,transform 0.55s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero-content{padding:0 20px 60px}
+  .hero-stats{display:none}
+  .slide-dots{right:20px}
+  .slide-counter{right:20px}
+  section,.cta-band{padding:60px 20px}
+  .what-inner,.proof-inner,.approach-inner,.product-inner,.cta-inner,.footer-top{grid-template-columns:1fr}
+  .what-card{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)}
+  footer{padding:0 20px}
+}
+
+.page-hero{padding:140px 48px 72px;background:var(--black);position:relative;overflow:hidden;border-bottom:3px solid var(--yellow)}
+.page-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,#0d1520 0%,#0a0a0a 100%);z-index:0}
+.page-hero-inner{position:relative;z-index:1;max-width:800px}
+.page-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.page-eyebrow::before{content:'';width:24px;height:2px;background:var(--yellow)}
+.page-hero h1{font-family:'Libre Baskerville',serif;font-size:clamp(36px,5vw,60px);font-weight:700;color:var(--white);line-height:1.08;letter-spacing:-0.5px;margin-bottom:20px}
+.page-hero p{font-size:17px;font-weight:300;line-height:1.75;color:rgba(255,255,255,0.6);max-width:560px}
+.page-body{background:var(--white)}
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero{padding:110px 20px 56px}
+  section,.cta-band{padding:60px 20px}
+  .approach-inner,.product-inner,.cta-inner,.footer-top{grid-template-columns:1fr}
+  footer{padding:0 20px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-top">Plumb</div><div class="nav-logo-sub">Construction Intelligence</div></a>
+  <div class="nav-right"><div class="nav-links"><a href="services-rewiring.html" style="color:var(--white)">Services</a><a href="company.html">Company</a><a href="contact.html" class="nav-cta">Contact Us</a></div></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">Service 01</div>
+    <h1>Organizational<br>Rewiring</h1>
+    <p>We map how your project teams actually work — then rebuild the workflows that are slowing you down, around AI-enabled processes.</p>
+  </div>
+</div>
+<div class="page-body">
+  <section>
+    <div class="approach-inner" style="max-width:1100px;margin:0 auto">
+      <div class="fade-in">
+        <div class="section-label">The Problem</div>
+        <h2>The tools aren't<br>the problem.<br><em>The org is.</em></h2>
+        <p class="lead" style="margin-top:20px">Most small and mid-size GCs invest in technology, run pilots, get promising results — and then nothing changes. Not because the tools failed. Because nobody touched the actual workflows, the reporting structures, or the way decisions get made.</p>
+        <p class="lead" style="margin-top:16px">That's the work we do.</p>
+      </div>
+      <div class="approach-right fade-in">
+        <div class="approach-item">
+          <div class="approach-item-num">01</div>
+          <div><div class="approach-item-title">Workflow Mapping</div>
+          <p class="approach-item-text">We come on site and map how work actually flows — submittals, RFIs, daily reporting, coordination meetings, field-to-office communication. We find where information dies and where decisions stall.</p></div>
+        </div>
+        <div class="approach-item">
+          <div class="approach-item-num">02</div>
+          <div><div class="approach-item-title">Gap Analysis</div>
+          <p class="approach-item-text">We identify the delta between how your org chart says things work and how they actually work. That gap is almost always where the cost and schedule risk lives.</p></div>
+        </div>
+        <div class="approach-item">
+          <div class="approach-item-num">03</div>
+          <div><div class="approach-item-title">Redesign & Implementation</div>
+          <p class="approach-item-text">We redesign the workflows, introduce AI-enabled processes where they add real value, and work alongside your team during rollout — not just hand you a slide deck.</p></div>
+        </div>
+        <div class="approach-item">
+          <div class="approach-item-num">04</div>
+          <div><div class="approach-item-title">Benchmark & Proof</div>
+          <p class="approach-item-text">We define a measurable outcome at the start — RFI cycle time, closeout speed, inspection pass rate — and we don't call the engagement complete until we can show the number moved.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="cta-band">
+    <div class="cta-inner" style="max-width:1100px;margin:0 auto">
+      <div class="cta-copy fade-in">
+        <div class="section-label" style="color:var(--yellow)">Get Started</div>
+        <h2 style="color:var(--white)">Ready to fix how<br>your projects run?</h2>
+        <p>Start with a 30-minute call. We'll tell you honestly whether this engagement makes sense for your firm.</p>
+      </div>
+      <div class="fade-in" style="display:flex;flex-direction:column;gap:12px">
+        <a href="contact.html" class="btn-yellow" style="text-align:center;justify-content:center">Contact Us →</a>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Plumb</div>
+      <div class="footer-brand-sub">Construction Intelligence</div>
+      <p class="footer-tagline">We make things true in the real world.<br><br>Garwood, NJ</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Services</div>
+      <a href="services-rewiring.html">Organizational Rewiring</a>
+      <a href="services-workforce.html">AI Workforce Design</a>
+      <a href="services-intelligence.html">Construction Intelligence</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="company.html">About Us</a>
+      <a href="company.html">Our Mission</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Contact</div>
+      <a href="mailto:dmcqu168@gmail.com">dmcqu168@gmail.com</a>
+      <a href="mailto:stefanwatson@gmail.com">stefanwatson@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Plumb. All rights reserved.</p>
+    <p class="footer-loc">plumb.build · Garwood, New Jersey</p>
+  </div>
+</footer>
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.08});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
